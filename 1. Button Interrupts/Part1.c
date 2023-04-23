@@ -75,21 +75,30 @@ void gpioInit(){
 
 
 // Port 2 interrupt service routine
+// rising edge 0 -> 1 button released
+// falling edge 1 -> 0 button pressed
 #pragma vector=PORT2_VECTOR
 __interrupt void Port_2(void)
 {
     P2IFG &= ~BIT3;                         // Clear P1.3 IFG
 
-    if ( )       // @TODO Fill in this argument within the If statement to check if the interrupt was triggered off a rising edge.
+    if (P2IES & BIT3)// @TODO Fill in this argument within the If statement to check if the interrupt was triggered off a rising edge.
     {
         LED_Color = 0;
         // @TODO Add code to change which edge the interrupt should be looking for next
+
+        P1OUT &= ~BIT0;
+        P2IES &= ~BIT3;
     }
 
-    else if ( ) // @TODO Fill in this argument within the If statement to check if the interrupt was triggered off a falling edge.
+    else if (P2IES != BIT3) // @TODO Fill in this argument within the If statement to check if the interrupt was triggered off a falling edge.
     {
         LED_Color = 1;
         // @TODO Add code to change which edge the interrupt should be looking for next
+
+        P6OUT &= ~BIT6;
+        P2IES |= BIT3;
     }
+    P1OUT &= ~BIT0;
 }
 
